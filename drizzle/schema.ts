@@ -2,8 +2,25 @@ import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { pgTable, uuid, varchar, integer, serial, timestamp, pgEnum } from "drizzle-orm/pg-core"
 import { createInsertSchema } from "drizzle-zod";
 
-const CategoriesEnum = ["sergical", "personal care", "vitals", "others"] as const;
-const ProductCategories = pgEnum("onboarding_step", CategoriesEnum);
+// const CategoriesEnum = ["sergical", "personal care", "vitals", "others"] as const;
+// export type PCategories = (typeof CategoriesEnum)[number];
+
+// const ProductCategories = pgEnum("categoryEnum", CategoriesEnum);
+
+export enum CategoriesEnum{
+  SERGICAL= 'sergical',
+  PERSONAL_CARE = 'personal',
+  VITALS = 'vitals',
+  OTHERS = 'others'
+}
+
+export function enumToPgEnum<T extends Record<string, any>>(
+  myEnum: T,
+): [T[keyof T], ...T[keyof T][]] {
+  return Object.values(myEnum).map((value: any) => `${value}`) as any
+}
+
+export const PCategories = pgEnum('ProductCategory', enumToPgEnum(CategoriesEnum))
 
 export const userTable = pgTable("Users", {
 	Id: uuid("user_id").defaultRandom().primaryKey().notNull(),
@@ -28,7 +45,7 @@ export const product = pgTable("Product", {
 	productDescription: varchar("product_description", { length: 256 }),
 	price: integer().notNull(),
 	stock: integer().default(1),
-	category: ProductCategories().default("others").notNull(),
+	ProductCategory : PCategories("category")
 });
 
 export const item = pgTable("Item", {
@@ -46,7 +63,6 @@ export const sessionTable = pgTable("Session", {
 export type User = InferSelectModel<typeof userTable>;
 export type NewUser = InferInsertModel<typeof userTable>;
 export type Session = InferSelectModel<typeof sessionTable>;
-export type PCategories = typeof CategoriesEnum[number];
 
 export const createOrderSchema = createInsertSchema(order)
 export const createProductSchema = createInsertSchema(product)

@@ -2,9 +2,8 @@ import { Hono } from "hono";
 import { db } from "./index.db";
 import { createOrderSchema, createProductSchema, order, product } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
-import { getUser } from "./authmiddleware";
+import { requireAuth } from ".";
 import { zValidator } from "@hono/zod-validator";
-
 
 export const admin = new Hono()
   .post("/product/add", zValidator("json", createProductSchema), async (c) => {

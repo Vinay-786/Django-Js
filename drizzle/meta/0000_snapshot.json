@@ -1,9 +1,54 @@
 {
-  "id": "5f38a1dc-4aa2-4322-a24d-21c6d7df7519",
+  "id": "dbc84fb8-fe27-49ea-b034-ee234da0d648",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.Item": {
+      "name": "Item",
+      "schema": "",
+      "columns": {
+        "order_item": {
+          "name": "order_item",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Item_product_id_Product_product_id_fk": {
+          "name": "Item_product_id_Product_product_id_fk",
+          "tableFrom": "Item",
+          "tableTo": "Product",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "product_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.Order": {
       "name": "Order",
       "schema": "",
@@ -42,10 +87,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "Order_customer_id_users_user_id_fk": {
-          "name": "Order_customer_id_users_user_id_fk",
+        "Order_customer_id_Users_user_id_fk": {
+          "name": "Order_customer_id_Users_user_id_fk",
           "tableFrom": "Order",
-          "tableTo": "users",
+          "tableTo": "Users",
           "columnsFrom": [
             "customer_id"
           ],
@@ -62,53 +107,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Item": {
-      "name": "Item",
-      "schema": "",
-      "columns": {
-        "order_item": {
-          "name": "order_item",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "quantity": {
-          "name": "quantity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "Item_product_id_product_product_id_fk": {
-          "name": "Item_product_id_product_product_id_fk",
-          "tableFrom": "Item",
-          "tableTo": "product",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "product_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.product": {
-      "name": "product",
+    "public.Product": {
+      "name": "Product",
       "schema": "",
       "columns": {
         "product_id": {
@@ -133,17 +133,18 @@
           "name": "price",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "stock": {
           "name": "stock",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": 1
         },
         "category": {
           "name": "category",
-          "type": "categories",
+          "type": "ProductCategory",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
@@ -157,8 +158,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.session": {
-      "name": "session",
+    "public.Session": {
+      "name": "Session",
       "schema": "",
       "columns": {
         "session_id": {
@@ -182,10 +183,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "session_user_id_users_user_id_fk": {
-          "name": "session_user_id_users_user_id_fk",
-          "tableFrom": "session",
-          "tableTo": "users",
+        "Session_user_id_Users_user_id_fk": {
+          "name": "Session_user_id_Users_user_id_fk",
+          "tableFrom": "Session",
+          "tableTo": "Users",
           "columnsFrom": [
             "user_id"
           ],
@@ -202,8 +203,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.Users": {
+      "name": "Users",
       "schema": "",
       "columns": {
         "user_id": {
@@ -212,6 +213,12 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "google_id": {
+          "name": "google_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "name": {
           "name": "name",
@@ -223,7 +230,7 @@
           "name": "email",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "PhoneNo": {
           "name": "PhoneNo",
@@ -248,13 +255,14 @@
     }
   },
   "enums": {
-    "public.categories": {
-      "name": "categories",
+    "public.ProductCategory": {
+      "name": "ProductCategory",
       "schema": "public",
       "values": [
         "sergical",
-        "personal care",
-        "vitamin and nutrition"
+        "personal",
+        "vitals",
+        "others"
       ]
     }
   },
