@@ -1,5 +1,5 @@
 {
-  "id": "dbc84fb8-fe27-49ea-b034-ee234da0d648",
+  "id": "fee34056-8562-425d-804b-b07aa46b0bbe",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -142,9 +142,9 @@
           "notNull": false,
           "default": 1
         },
-        "category": {
-          "name": "category",
-          "type": "ProductCategory",
+        "ProductCategory": {
+          "name": "ProductCategory",
+          "type": "product",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
@@ -255,12 +255,12 @@
     }
   },
   "enums": {
-    "public.ProductCategory": {
-      "name": "ProductCategory",
+    "public.product": {
+      "name": "product",
       "schema": "public",
       "values": [
         "sergical",
-        "personal",
+        "personal_care",
         "vitals",
         "others"
       ]

@@ -1,4 +1,4 @@
-CREATE TYPE "public"."ProductCategory" AS ENUM('sergical', 'personal', 'vitals', 'others');--> statement-breakpoint
+CREATE TYPE "public"."product" AS ENUM('sergical', 'personal_care', 'vitals', 'others');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "Item" (
 	"order_item" serial PRIMARY KEY NOT NULL,
 	"product_id" integer NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "Product" (
 	"product_description" varchar(256),
 	"price" integer NOT NULL,
 	"stock" integer DEFAULT 1,
-	"category" "ProductCategory"
+	"ProductCategory" "product"
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "Session" (
